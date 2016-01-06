@@ -25,9 +25,10 @@ Node::Node()
 
 void Node::addChild(Node &child)
 {
-	children.resize(numOfChildren + 1);
+	//children.resize(numOfChildren + 1);
+	//children.begin();//
 	children.push_back(&child);
-	child.setParent(*this);
+	child.parent = this;
 	numOfChildren++;
 }
 
@@ -112,7 +113,10 @@ void Tree::addElements(int num)
 	newNode->data = num;
 
 	if (root == NULL)
+	{
 		root = newNode;
+		current = root;
+	}
 	else
 	{
 		current->addChild(*newNode);
