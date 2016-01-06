@@ -67,10 +67,13 @@ public:
 
 	bool isEmpty() const;
 
-	int getRoot() const;
+	Node* getCurrent() const;
+
+	Node* getRoot() const;
 	void addElements(int num);
 	void moveDown();
 	void moveUp();
+	void begin();
 	void print() const;
 };
 
@@ -101,9 +104,14 @@ bool Tree::isEmpty() const
 	return root == NULL;
 }
 
-int Tree::getRoot() const
+Node* Tree::getCurrent() const
 {
-	return root->data;
+	return current;
+}
+
+Node* Tree::getRoot() const
+{
+	return root;
 }
 
 void Tree::addElements(int num)
@@ -134,6 +142,11 @@ void Tree::moveUp()
 {
 	if (current->parent != NULL)
 		current = current->parent;
+}
+
+void Tree::begin()
+{
+	this->current = root;
 }
 
 void Tree::print() const
