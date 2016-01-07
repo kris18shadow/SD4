@@ -2,12 +2,53 @@
 #include <iostream>
 #include "Tree.h"
 
-void readTreeFromInput(Tree A)
+bool checkInput(char* string, size_t size)
 {
+	//counters for "{" and "}":
+	size_t countOpenBraceOne = 0;
+	size_t countCloseBraceOne = 0;
+	//counters for "(" and ")":
+	size_t countOpenBraceTwo = 0;
+	size_t countCloseBraceTwo = 0;
+
+	for (size_t i = 0; i < size; i++)
+	{
+		if (string[i] == '{')
+			countOpenBraceOne++;
+		else
+			if (string[i] == '}')
+				countCloseBraceOne++;
+			else
+				if (string[i] == '(')
+					countOpenBraceTwo++;
+				else
+					if (string[i] == ')')
+						countCloseBraceTwo++;
+					else
+						if ((string[i] < '0' || string[i] > '9') && string[i] != ' ')
+							return false;
+	}
+
+	if (countOpenBraceOne != countCloseBraceOne)
+		return false;
+	if (countOpenBraceTwo != countCloseBraceTwo)
+		return false;
+
+	return true;
+}
+
+Tree readTreeFromInput()
+{
+	Tree A;
 	char tree[1028];
 	std::cin.getline(tree, 1027, '\n');
 
 	size_t size = strlen(tree);
+	if (!checkInput(tree, size))
+	{
+		std::cerr << "Wrong Input!\n";
+		return A;
+	}
 
 	for (size_t i = 0; i < size; i++)
 	{
@@ -22,7 +63,7 @@ void readTreeFromInput(Tree A)
 			}
 			if (num > 0)
 			{
-				//add number
+				//add number to tree
 				A.addElements(num);
 				i--;
 			}
@@ -30,109 +71,38 @@ void readTreeFromInput(Tree A)
 		}
 		if (tree[i] == '{')
 		{
+			//move one level down if possible
 			A.moveDown();
 		}
 		if (tree[i] == '}')
 		{
-			A.moveUp();
-		}
-	}
-}
-
-void readTreesFromInput(Tree A, Tree B)
-{
-	char treeOne[1028];
-	char treeTwo[1028];
-
-	std::cout << "Enter first tree: ";
-	std::cin.getline(treeOne, 1027, '\n');
-
-	std::cout << "Enter second tree: ";
-	std::cin.getline(treeTwo, 1027, '\n');
-
-
-	size_t oneSize = strlen(treeOne);
-	size_t twoSize = strlen(treeTwo);
-
-	for (size_t i = 0; i < oneSize; i++)
-	{
-		if (treeOne[i] >= '0' && treeOne[i] <= '9')
-		{
-			//if digit is >9
-			int num = 0;
-			while (isdigit(treeOne[i]))
-			{
-				num = 10 * num + treeOne[i] - '0';
-				i++;
-			}
-			if (num > 0)
-			{
-				//add number
-				A.addElements(num);
-				i--;
-			}
-
-		}
-		if (treeOne[i] == '{')
-		{
-			A.moveDown();
-		}
-		if (treeOne[i] == '}')
-		{
+			//move one level up if possible
 			A.moveUp();
 		}
 	}
 
-	for (size_t i = 0; i < twoSize; i++)
-	{
-		if (treeTwo[i] >= '0' && treeTwo[i] <= '9')
-		{
-			//if digit is >9
-			int num = 0;
-			while (isdigit(treeTwo[i]))
-			{
-				num = 10 * num + treeTwo[i] - '0';
-				i++;
-			}
-			if (num > 0)
-			{
-				//add number
-				B.addElements(num);
-				i--;
-			}
-
-		}
-		if (treeOne[i] == '{')
-		{
-			B.moveDown();
-		}
-		if (treeOne[i] == '}')
-		{
-			B.moveUp();
-		}
-	}
+	return A;
 }
 
 bool checkIsomorphism(Tree A, Tree B)
 {
 	if (A.getRoot() == NULL && B.getRoot() == NULL)
 	{
-		//std::cout << "YES\n";
 		return true;
 	}
 
+	//setting current at root:
 	A.begin(); B.begin();
+
 	while (true)
 	{
 		if (A.getCurrent()->numOfChildren != B.getCurrent()->numOfChildren)
 		{
-			//std::cout << "NO\n";
 			return false;
 		}
 
 		if (A.getCurrent()->numOfChildren == 0 && B.getCurrent()->numOfChildren == 0)
 		{
-			//std::cout << "YES\n";
 			return true;
 		}
 
@@ -146,7 +116,6 @@ bool checkIsomorphism(Tree A, Tree B)
 			}
 			if (match == 0)
 			{
-				//std::cout << "NO\n";
 				return false;
 			}
 		}

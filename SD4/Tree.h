@@ -13,7 +13,6 @@ struct Node
 	Node();
 	void addChild(Node &child);
 	void setParent(Node parent);
-	void print(bool showData) const;
 };
 
 Node::Node()
@@ -25,8 +24,6 @@ Node::Node()
 
 void Node::addChild(Node &child)
 {
-	//children.resize(numOfChildren + 1);
-	//children.begin();//
 	children.push_back(&child);
 	child.parent = this;
 	numOfChildren++;
@@ -35,23 +32,6 @@ void Node::addChild(Node &child)
 void Node::setParent(Node parent)
 {
 	this->parent = &parent;
-}
-
-void Node::print(bool showData) const
-{
-	if(showData)
-		std::cout << data << std::endl;
-
-	for (size_t i = 0; i < numOfChildren; i++)
-	{
-		std::cout << children[i] << " ";
-	}
-
-	for (size_t i = 0; i < numOfChildren; i++)
-	{
-		children[i]->print(false);
-		std::cout << std::endl;
-	}
 }
 
 class Tree
