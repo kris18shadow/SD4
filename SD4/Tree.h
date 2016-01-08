@@ -113,7 +113,7 @@ void Tree::addElements(int num)
 
 void Tree::moveDown()
 {
-	if(current != NULL)
+	if (current != NULL)
 		if (current->numOfChildren > 0)
 			current = current->children[current->numOfChildren - 1];
 }
@@ -127,16 +127,4 @@ void Tree::moveUp()
 void Tree::begin()
 {
 	this->current = root;
-}
-
-void Tree::print() const
-{
-	if (!isEmpty())
-	{
-		//print
-	}
-	else
-	{
-		std::cout << "Tree is empty!\n";
-	}
 }

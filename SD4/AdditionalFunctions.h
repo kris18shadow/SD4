@@ -84,42 +84,42 @@ Tree readTreeFromInput()
 	return A;
 }
 
-bool checkIsomorphism(Tree A, Tree B)
+bool checkIsomorphism(Node* A, Node* B)
 {
-	if (A.getRoot() == NULL && B.getRoot() == NULL)
+	if (A == NULL && B == NULL)
 	{
 		return true;
 	}
 
-	//setting current at root:
-	A.begin(); B.begin();
-
 	while (true)
 	{
-		if (A.getCurrent()->numOfChildren != B.getCurrent()->numOfChildren)
-		{
-			return false;
-		}
-
-		if (A.getCurrent()->numOfChildren == 0 && B.getCurrent()->numOfChildren == 0)
-		{
-			return true;
-		}
-
-		for (size_t i = 0; i < A.getCurrent()->numOfChildren; i++)
+		for (size_t i = 0; i < A->numOfChildren; i++)
 		{
 			int match = 0;
-			for (size_t j = 0; j < B.getCurrent()->numOfChildren; j++)
+			bool check = true;
+
+			for (size_t j = 0; j < B->numOfChildren; j++)
 			{
-				if (A.getCurrent()->children[i]->numOfChildren == B.getCurrent()->children[j]->numOfChildren)
-					match++;
+				if (A->children[i]->numOfChildren == B->children[j]->numOfChildren)
+				{
+					if (!checkIsomorphism(A->children[i], B->children[j]))
+					{
+						check = false;
+					}
+					else
+					{
+						check = true;
+						match++;
+						break;
+					}
+				}
 			}
-			if (match == 0)
-			{
+
+			if (check == false || match == 0)
 				return false;
-			}
+
 		}
 
-		A.moveDown(); B.moveDown();
+		return true;
 	}
 }

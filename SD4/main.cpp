@@ -11,7 +11,7 @@ int main()
 	std::cout << "Enter Second tree: ";
 	B = readTreeFromInput();
 
-	if (checkIsomorphism(A, B))
+	if (checkIsomorphism(A.getRoot(), B.getRoot()))
 		std::cout << "YES\n";
 	else
 		std::cout << "NO\n";		
