@@ -1,8 +1,10 @@
 #pragma once
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "Tree.h"
 
-bool checkInput(char* string, size_t size)
+bool checkInput(std::string string, size_t size)
 {
 	//counters for "{" and "}":
 	size_t countOpenBraceOne = 0;
@@ -37,17 +39,18 @@ bool checkInput(char* string, size_t size)
 	return true;
 }
 
-Tree readTreeFromInput()
+void writeToTreeFromInput(Tree& A)
 {
-	Tree A;
-	char tree[1028];
-	std::cin.getline(tree, 1027, '\n');
+	std::string tree;
+	std::getline(std::cin, tree);
+	
+	size_t size = tree.size();
 
-	size_t size = strlen(tree);
 	if (!checkInput(tree, size))
 	{
 		std::cerr << "Wrong Input!\n";
-		return A;
+		A.addElements(0);
+		return;
 	}
 
 	for (size_t i = 0; i < size; i++)
@@ -69,19 +72,19 @@ Tree readTreeFromInput()
 			}
 
 		}
+		else
 		if (tree[i] == '{')
 		{
 			//move one level down if possible
 			A.moveDown();
 		}
+		else
 		if (tree[i] == '}')
 		{
 			//move one level up if possible
 			A.moveUp();
 		}
 	}
-
-	return A;
 }
 
 bool checkIsomorphism(Node* A, Node* B)
@@ -91,35 +94,34 @@ bool checkIsomorphism(Node* A, Node* B)
 		return true;
 	}
 
-	while (true)
-	{
-		for (size_t i = 0; i < A->numOfChildren; i++)
-		{
-			int match = 0;
-			bool check = true;
 
-			for (size_t j = 0; j < B->numOfChildren; j++)
+	for (size_t i = 0; i < A->numOfChildren; i++)
+	{
+		int match = 0;
+		bool check = true;
+
+		for (size_t j = 0; j < B->numOfChildren; j++)
+		{
+			if (A->children[i]->numOfChildren == B->children[j]->numOfChildren)
 			{
-				if (A->children[i]->numOfChildren == B->children[j]->numOfChildren)
+				if (!checkIsomorphism(A->children[i], B->children[j]))
 				{
-					if (!checkIsomorphism(A->children[i], B->children[j]))
-					{
-						check = false;
-					}
-					else
-					{
-						check = true;
-						match++;
-						break;
-					}
+					check = false;
+				}
+				else
+				{
+					check = true;
+					match++;
+					break;
 				}
 			}
-
-			if (check == false || match == 0)
-				return false;
-
 		}
 
-		return true;
+		if (check == false || match == 0)
+			return false;
+
 	}
+
+	return true;
+
 }

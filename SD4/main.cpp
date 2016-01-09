@@ -7,9 +7,9 @@ int main()
 	Tree A, B;
 	
 	std::cout << "Enter First tree: ";
-	A = readTreeFromInput();
+	writeToTreeFromInput(A);
 	std::cout << "Enter Second tree: ";
-	B = readTreeFromInput();
+	writeToTreeFromInput(B);
 
 	if (checkIsomorphism(A.getRoot(), B.getRoot()))
 		std::cout << "YES\n";
